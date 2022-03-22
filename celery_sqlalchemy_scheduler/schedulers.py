@@ -2,6 +2,7 @@
 
 import logging
 import datetime as dt
+import re
 from multiprocessing.util import Finalize
 
 import sqlalchemy
@@ -445,4 +446,5 @@ class DatabaseScheduler(Scheduler):
     def info(self):
         """override"""
         # return infomation about Schedule
-        return '    . db -> {self.dburi}'.format(self=self)
+        safe_dburi = re.sub('://.*?@','://<username>:<secret>@', self.dburi, flags=re.DOTALL)
+        return f'    . db -> {safe_dburi}'
